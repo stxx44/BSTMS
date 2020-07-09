@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.icss.hotel.dao.UserMapper">
+    <resultMap id="userMap" type="com.icss.hotel.domain.User">
+        <id column="account" property="account" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="g_level" property="g_level" jdbcType="INTEGER" />
+    </resultMap>
+
+    <resultMap id="userMapId" type="com.icss.hotel.domain.User">
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="g_level" property="g_level" jdbcType="INTEGER" />
+    </resultMap>
+
+    <select id="login" parameterType="java.lang.String" resultType="com.icss.hotel.domain.User">
+        SELECT * FROM user  WHERE account=#{account}
+    </select>
+    <insert id="register" parameterType="com.icss.hotel.domain.User">
+        INSERT INTO user (account,password,email,phone,level,state,name) VALUES(#{account},#{password},#{email},#{phone},0,1,#{name})
+    </insert>
+    <select id="checkAccount" parameterType="java.lang.String" resultType="com.icss.hotel.domain.User">
+        SELECT * FROM user  WHERE account=#{account}
+    </select>
+
+    <select id="queryGroupId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT group_id FROM user WHERE account = #{account}
+    </select>
+
+    <update id="updateGroupId" parameterType="com.icss.hotel.domain.Group">
+        UPDATE user SET group_id = #{group_id} where account = #{account}
+    </update>
+
+    <select id="getAllaccount" resultMap="userMap" parameterType="java.lang.String">
+        SELECT u.account account,u.name name,u.phone phone,u.email email,g.g_level g_level
+        FROM user u,g_account g
+        where u.group_id = #{group_id}
+        AND u.account = g.account
+    </select>
+
+    <select id="getGroupId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT group_id FROM user WHERE account = #{account}
+    </select>
+
+   <select id="getUserById" resultMap="userMapId"  parameterType="java.lang.String">
+    SELECT u.name name,g.g_level g_level
+    FROM user u,g_account g
+    where u.account = #{account}
+    AND g.account =#{account}
+    </select>
+
+    <update id="updateState" parameterType="com.icss.hotel.domain.User">
+        UPDATE g_account SET g_level = #{g_level} WHERE account = #{account}
+    </update>
+
+    <select id="getPassword" parameterType="com.icss.hotel.domain.User" resultType="java.lang.String">
+        select password from user where account = #{account}
+    </select>
+
+    <update id="updatePassword" parameterType="com.icss.hotel.domain.User">
+        UPDATE user SET password = #{password} where account = #{account}
+    </update>
+
+    <select id="getUser" parameterType="java.lang.String" resultType="com.icss.hotel.domain.User">
+        select * from user where account = #{account}
+    </select>
+
+    <update id="deleteGroup" parameterType="java.lang.String">
+        update user set group_id = NULL where group_id = #{group_id}
+    </update>
+
+    <insert id="managerRegister" parameterType="com.icss.hotel.domain.User">
+        INSERT INTO user (account,password,email,phone,level,state,name) VALUES(#{account},#{password},#{email},#{phone},1,1,#{name})
+    </insert>
+</mapper>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-for="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+
+<!-- Mirrored from coderthemes.com/velonic_3.0/admin_3/table-datatable.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 29 May 2016 14:53:05 GMT -->
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <!---->
+
+    <!-- Plugins css -->
+    <link href="assets/modal-effect/css/component.css" rel="stylesheet">
+
+
+    <!---->
+
+
+    <link rel="shortcut icon" href="img/favicon_1.ico">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-reset.css" rel="stylesheet">
+
+    <!--Animation css-->
+    <link href="css/animate.css" rel="stylesheet">
+
+    <!--Icon-fonts css-->
+    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet"/>
+    <link href="assets/ionicon/css/ionicons.min.css" rel="stylesheet"/>
+
+    <!-- DataTables -->
+    <link href="assets/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+
+    <!-- Custom styles for this template -->
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/helper.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        div.row table thead tr th {
+            text-align: center;
+        }
+
+        div.row table tbody tr td {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<!--Main Content Start -->
+<section>
+
+    <!-- Page Content Start -->
+    <!-- ================== -->
+
+    <div class="wraper container-fluid">
+        <!--<div class="page-title">
+            <h3 class="title">教师列表</h3>
+        </div>-->
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">客房列表</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="md-overlay"></div>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <table id="datatable" class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>顾客姓名</th>
+                                        <th>性别</th>
+                                        <th>身份证号码</th>
+                                        <th>手机号码</th>
+                                        <th>积分情况</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+<script src="js/jquery.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/pace.min.js"></script>
+<script src="js/wow.min.js"></script>
+<script src="js/jquery.nicescroll.js" type="text/javascript"></script>
+
+<!-- Modal-Effect -->
+<script src="assets/modal-effect/js/classie.js"></script>
+<script src="assets/modal-effect/js/modalEffects.js"></script>
+<script src="js/jquery.app.js"></script>
+
+
+<script src="js/layer/layer.js"></script>
+<script src="js/vue.min.js"></script>
+<script src="js/vue-resource.min.js"></script>
+<script src="js/axios.min.js"></script>
+<script src="js/common.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        getAllCustomer();
+    })
+
+    function getAllCustomer() {
+        $('tbody').empty();
+        $.getJSON(baseUrl + '/customer/getAllCustomer.action', function (data) {
+            if (data.code == 200) {
+                $.each(data.CustomerList, function (index, obj) {
+                    var tr = $('<tr></tr>');
+                    var td1 = $('<td></td>').text(obj.cname);
+                    var td2 = $('<td></td>').text(obj.gender);
+                    var td3 = $('<td></td>').text(obj.idcard);
+                    var td4 = $('<td></td>').text(obj.phone);
+                    var td5 = $('<td></td>').text(obj.integral);
+                    var td6 = $('<td></td>');
+                    var editA = $('<a onclick="updateCM('+ obj.cno + ')"></a>').html('修改&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
+                    // var delA = $('<a onclick="delRoom(' + obj.cno + ')"></a>').html('删除');
+                    td6.append(editA);
+                    tr.append(td1).append(td2).append(td3).append(td4).append(td5).append(td6);
+                    $('tbody').append(tr);
+                })
+            }
+        }, 'JSON');
+
+    }
+    function updateCM(cno) {
+        location.href = "update_CM.html?cno=" + cno;
+    }
+
+
+</script>
+
+</body>
+</html>

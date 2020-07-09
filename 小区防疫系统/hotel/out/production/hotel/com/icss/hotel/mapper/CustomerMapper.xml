@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.icss.hotel.dao.CustomerMapper" >
+  <select id="queryAllCustomer" resultType="com.icss.hotel.domain.Customer">
+    select * FROM tb_customer
+  </select>
+
+  <update id="updateIntegral" parameterType="int">
+    UPDATE tb_customer SET integral =#{integral}+integral WHERE cno = #{cno}
+  </update>
+
+  <select id="getAllCustomer" resultType="com.icss.hotel.domain.Customer">
+    SELECT cno,cname,gender,idcard,phone,integral FROM tb_customer
+  </select>
+
+  <select id="queryCustomerByName" resultType="com.icss.hotel.domain.Customer" parameterType="java.lang.String">
+        SELECT * FROM tb_customer WHERE cname =#{cname}
+    </select>
+
+  <insert id="addCustomer" parameterType="com.icss.hotel.domain.Customer">
+        INSERT INTO tb_customer (cname,gender,phone,idcard,integral) VALUES(#{cname},#{gender},#{phone},#{idcard},0)
+    </insert>
+
+  <select id="queryCMByCno" resultType="com.icss.hotel.domain.Customer" parameterType="java.lang.Integer">
+        SELECT * FROM tb_customer WHERE cno =#{cno}
+    </select>
+
+  <update id="updateCM" parameterType="com.icss.hotel.domain.Customer">
+        UPDATE tb_customer SET cname =#{cname} ,gender =#{gender} ,idcard =#{idcard} ,phone =#{phone} WHERE cno =#{cno}
+    </update>
+</mapper>

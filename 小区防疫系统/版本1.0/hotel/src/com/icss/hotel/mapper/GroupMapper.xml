@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.icss.hotel.dao.GroupMapper">
+    <resultMap id="groupMap" type="com.icss.hotel.domain.Group" >
+        <id column="group_id" property="group_id" jdbcType="INTEGER" />
+        <result column="group_name" property="group_name" jdbcType="VARCHAR" />
+        <result column="prov" property="prov" jdbcType="VARCHAR" />
+        <result column="city" property="city" jdbcType="VARCHAR" />
+        <result column="country" property="country" jdbcType="VARCHAR" />
+        <result column="owner" property="owner" jdbcType="VARCHAR" />
+        <result column="account" property="account" jdbcType="VARCHAR" />
+        <result column="code" property="code" jdbcType="VARCHAR" />
+    </resultMap>
+    <insert id="addGroup" parameterType="com.icss.hotel.domain.Group" >
+        INSERT INTO group (group_name,owner,account) VALUES(#{group_name},#{owner},'stxx44')
+    </insert>
+    <select id="queryAllGroup" resultMap="groupMap">
+        select * from group
+    </select>
+</mapper>

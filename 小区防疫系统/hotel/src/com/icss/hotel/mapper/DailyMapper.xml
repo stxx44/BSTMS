@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.icss.hotel.dao.DailyMapper" >
+
+    <insert id="addDaily" parameterType="com.icss.hotel.domain.Daily">
+        INSERT INTO daily (group_id,time,name,goal,car)values (#{group_id},#{time},#{name},#{goal},#{car})
+    </insert>
+
+    <select id="getSpecificDaily" parameterType="com.icss.hotel.domain.Daily" resultType="com.icss.hotel.domain.Daily">
+        SELECT * from daily where group_id = #{group_id}
+        AND datediff(time,#{time}) = 0
+    </select>
+
+    <select id="getAllDaily" resultType="com.icss.hotel.domain.Daily">
+        select * from daily
+    </select>
+</mapper>

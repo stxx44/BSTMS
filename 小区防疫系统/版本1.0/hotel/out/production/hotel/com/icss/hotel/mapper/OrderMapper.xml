@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.icss.hotel.dao.OrderMapper" >
+
+  <resultMap id="orderMapp" type="com.icss.hotel.domain.Order" >
+    <id column="ono" property="ono" jdbcType="INTEGER" />
+    <result column="tname" property="tname" jdbcType="INTEGER" />
+    <result column="cno" property="cno" jdbcType="INTEGER" />
+    <result column="rno" property="rno" jdbcType="INTEGER" />
+    <result column="rnum" property="rnum" jdbcType="INTEGER"  />
+    <result column="cname" property="cname" jdbcType="VARCHAR" />
+    <result column="starttime" property="starttime" jdbcType="VARCHAR" />
+    <result column="endtime" property="endtime" jdbcType="VARCHAR" />
+    <result column="ostate" property="ostate" jdbcType="INTEGER" />
+    <result column="empno" property="empno" jdbcType="INTEGER" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+  </resultMap>
+
+
+  <resultMap id="BaseResultMap" type="com.icss.hotel.domain.Order" >
+    <id column="ono" property="ono" jdbcType="INTEGER" />
+    <result column="cno" property="cno" jdbcType="INTEGER" />
+    <result column="rno" property="rno" jdbcType="INTEGER" />
+    <result column="starttime" property="starttime" jdbcType="VARCHAR" />
+    <result column="endtime" property="endtime" jdbcType="VARCHAR" />
+    <result column="ostate" property="ostate" jdbcType="INTEGER" />
+    <result column="empno" property="empno" jdbcType="INTEGER" />
+  </resultMap>
+
+
+  <resultMap id="orderMap" type="com.icss.hotel.domain.Order" >
+    <id column="ono" property="ono" jdbcType="INTEGER" />
+    <result column="tname" property="tname" jdbcType="INTEGER" />
+    <result column="cno" property="cno" jdbcType="INTEGER" />
+    <result column="rno" property="rno" jdbcType="INTEGER" />
+    <result column="rnum" property="rnum" jdbcType="INTEGER" />
+    <result column="starttime" property="starttime" jdbcType="VARCHAR" />
+    <result column="endtime" property="endtime" jdbcType="VARCHAR" />
+    <result column="ostate" property="ostate" jdbcType="INTEGER" />
+    <result column="empno" property="empno" jdbcType="INTEGER" />
+  </resultMap>
+
+  <insert id="moveIn" parameterType="com.icss.hotel.domain.Order">
+    INSERT INTO tb_order (cno,rno,startTime,endTime,ostate,empno) VALUES (#{cno},#{rno},#{starttime},#{endtime},1,1)
+  </insert>
+
+  <update id="checkOut" parameterType="com.icss.hotel.domain.Order">
+    UPDATE tb_order SET ostate = 0 WHERE ono = #{ono}
+  </update>
+  <select id="getDays"  resultType="int" parameterType="int" >
+    SELECT DATEDIFF(STR_TO_DATE(endtime,'%Y-%m-%d'),STR_TO_DATE(starttime,'%Y-%m-%d'))FROM tb_order WHERE ono = #{ono}
+  </select>
+  <select id="queryAllOrdern" resultMap="orderMapp">
+      SELECT o.ono ono,t.tname tname,t.price price,o.cno cno,o.rno rno,r.rnum rnum,o.starttime starttime,o.endtime endtime,o.ostate ostate,o.empno empno FROM tb_order o,tb_type t,tb_room r
+      WHERE o.rno = r.rno
+      AND r.tno = t.tno
+      AND ostate = 1
+  </select>
+
+  <select id="queryAllOrder" resultMap="orderMapp">
+    SELECT o.ono ono,t.tname tname,o.rno rno,o.cno cno,c.cname cname,r.rnum rnum,o.starttime starttime,o.endtime endtime,o.ostate ostate,o.empno empno
+    FROM tb_order o,tb_type t,tb_room r,tb_customer c
+    WHERE o.rno = r.rno
+    AND o.cno = c.cno
+    AND r.tno = t.tno
+    AND ostate = 1
+  </select>
+
+
+  <sql id="Base_Column_List" >
+    ono, cno, rno, startTime, endTime, ostate, empno
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_order
+    where ono = #{ono,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_order
+    where ono = #{ono,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.icss.hotel.domain.Order" >
+    insert into tb_order (ono, cno, rno, 
+      startTime, endTime, ostate, 
+      empno)
+    values (#{ono,jdbcType=INTEGER}, #{cno,jdbcType=INTEGER}, #{rno,jdbcType=INTEGER}, 
+      #{starttime,jdbcType=VARCHAR}, #{endtime,jdbcType=VARCHAR}, #{ostate,jdbcType=INTEGER}, 
+      #{empno,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.icss.hotel.domain.Order" >
+    insert into tb_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ono != null" >
+        ono,
+      </if>
+      <if test="cno != null" >
+        cno,
+      </if>
+      <if test="rno != null" >
+        rno,
+      </if>
+      <if test="starttime != null" >
+        startTime,
+      </if>
+      <if test="endtime != null" >
+        endTime,
+      </if>
+      <if test="ostate != null" >
+        ostate,
+      </if>
+      <if test="empno != null" >
+        empno,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ono != null" >
+        #{ono,jdbcType=INTEGER},
+      </if>
+      <if test="cno != null" >
+        #{cno,jdbcType=INTEGER},
+      </if>
+      <if test="rno != null" >
+        #{rno,jdbcType=INTEGER},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=VARCHAR},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=VARCHAR},
+      </if>
+      <if test="ostate != null" >
+        #{ostate,jdbcType=INTEGER},
+      </if>
+      <if test="empno != null" >
+        #{empno,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.icss.hotel.domain.Order" >
+    update tb_order
+    <set >
+      <if test="cno != null" >
+        cno = #{cno,jdbcType=INTEGER},
+      </if>
+      <if test="rno != null" >
+        rno = #{rno,jdbcType=INTEGER},
+      </if>
+      <if test="starttime != null" >
+        startTime = #{starttime,jdbcType=VARCHAR},
+      </if>
+      <if test="endtime != null" >
+        endTime = #{endtime,jdbcType=VARCHAR},
+      </if>
+      <if test="ostate != null" >
+        ostate = #{ostate,jdbcType=INTEGER},
+      </if>
+      <if test="empno != null" >
+        empno = #{empno,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ono = #{ono,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.icss.hotel.domain.Order" >
+    update tb_order
+    set cno = #{cno,jdbcType=INTEGER},
+      rno = #{rno,jdbcType=INTEGER},
+      startTime = #{starttime,jdbcType=VARCHAR},
+      endTime = #{endtime,jdbcType=VARCHAR},
+      ostate = #{ostate,jdbcType=INTEGER},
+      empno = #{empno,jdbcType=INTEGER}
+    where ono = #{ono,jdbcType=INTEGER}
+  </update>
+</mapper>

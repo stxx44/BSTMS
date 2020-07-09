@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.icss.hotel.dao.RoomMapper">
+    <select id="queryAllRoom" resultType="java.util.Map">
+  SELECT r.*,t.tname,t.price FROM tb_room r,tb_type t WHERE r.tno = t.tno
+</select>
+
+    <insert id="addRoom" parameterType="com.icss.hotel.domain.Room">
+        INSERT INTO tb_room(rnum,tno,rstate,remark) VALUES(#{rnum},#{tno},0,#{remark})
+    </insert>
+
+    <select id="queryRoomByState" resultType="com.icss.hotel.domain.Room">
+        SELECT * FROM tb_room WHERE rstate = 0
+    </select>
+
+    <update id="updateRoomState" parameterType="int">
+        UPDATE tb_room SET rstate = #{state} WHERE rno = #{rno}
+    </update>
+
+    <!--删除客房-->
+    <delete id="delRoom" parameterType="java.lang.Integer">
+        DELETE FROM tb_room WHERE rnum= #{rnum}
+    </delete>
+
+
+    <select id="queryRoomExist"  parameterType="java.lang.String" resultType="com.icss.hotel.domain.Room">
+    select * from  tb_room where rnum = #{rnum}
+    </select>
+
+
+    <!--通过客房号搜索房间信息-->
+    <select id="queryRoomById" resultType="com.icss.hotel.domain.Room" parameterType="java.lang.String">
+        SELECT * FROM  tb_room WHERE rnum =#{rnum}
+    </select>
+
+    <!--更新房间信息-->
+    <update id="updateRoom" parameterType="com.icss.hotel.domain.Room">
+        UPDATE tb_room SET rnum=#{rnum},remark =#{remark} WHERE rno = #{rno}
+    </update>
+
+    <update id="updateRoomStateByRnum" parameterType="java.lang.Integer">
+        UPDATE tb_room SET rstate = 0 WHERE rnum = #{rnum}
+    </update>
+</mapper>

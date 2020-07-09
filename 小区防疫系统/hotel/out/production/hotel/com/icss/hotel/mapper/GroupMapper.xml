@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.icss.hotel.dao.GroupMapper">
+    <resultMap id="groupMap" type="com.icss.hotel.domain.Group" >
+        <id column="group_id" property="group_id" jdbcType="INTEGER" />
+        <result column="group_name" property="group_name" jdbcType="VARCHAR" />
+        <result column="prov" property="prov" jdbcType="VARCHAR" />
+        <result column="city" property="city" jdbcType="VARCHAR" />
+        <result column="country" property="country" jdbcType="VARCHAR" />
+        <result column="owner" property="owner" jdbcType="VARCHAR" />
+        <result column="account" property="account" jdbcType="VARCHAR" />
+        <result column="code" property="code" jdbcType="VARCHAR" />
+    </resultMap>
+    <resultMap id="groupMap1" type="com.icss.hotel.domain.Group">
+
+    </resultMap>
+    <insert id="addGroup" parameterType="com.icss.hotel.domain.Group" >
+        INSERT INTO g_group (group_name,prov,city,country,owner,account,group_id) VALUES(#{group_name},#{prov},#{city},#{country},#{owner},#{account},#{group_id})
+    </insert>
+    <select id="queryAllGroup" resultMap="groupMap">
+        select * from g_group
+    </select>
+    <insert id="addGroupList" parameterType="com.icss.hotel.domain.GroupList">
+        INSERT into g_account(group_name,account,group_id,g_level ) values(#{group_name},#{account},#{group_id},3)
+    </insert>
+    <select id="queryGroupId" resultMap="groupMap">
+        select * from g_group where group_id = #{group_id}
+    </select>
+    <insert id="joinGroup" parameterType="com.icss.hotel.domain.GroupList">
+           INSERT INTO g_account(group_name,group_id,account,g_level) values (#{group_name},#{group_id},#{account},1)
+    </insert>
+    <select id="findGroup" parameterType="java.lang.String" resultMap="groupMap">
+           select * from g_group where group_id = #{group_id}
+    </select>
+
+    <select id="checkLevel" parameterType="java.lang.String" resultType="java.lang.Integer">
+           select g_level from g_account where account = #{account}
+    </select>
+
+    <select id="getGroupName" parameterType="java.lang.String" resultType="java.lang.String">
+        select group_name from g_group where group_id = #{group_id}
+    </select>
+   <delete id="deleteGroup" parameterType="com.icss.hotel.domain.Group">
+       delete from  g_group where group_id = #{group_id}
+   </delete>
+
+</mapper>

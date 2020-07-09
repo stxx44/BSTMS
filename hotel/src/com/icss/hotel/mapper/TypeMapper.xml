@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.icss.hotel.dao.TypeMapper">
+
+    <!--添加客房类型-->
+    <insert id="addType" parameterType="com.icss.hotel.domain.Type">
+    INSERT INTO tb_type(tname,price,totalnum,restnum) VALUES(#{tname},#{price},#{totalnum},#{totalnum})
+  </insert>
+
+    <!--显示所有客房类型-->
+    <select id="queryAllType" resultType="com.icss.hotel.domain.Type">
+    SELECT * FROM tb_type
+  </select>
+
+    <delete id="delType" parameterType="java.lang.Integer">
+    DELETE FROM tb_type WHERE tno = #{tno}
+  </delete>
+
+
+    <select id="queryTypeById" resultType="com.icss.hotel.domain.Type" parameterType="java.lang.Integer">
+        SELECT * FROM tb_type WHERE tno =#{tno}
+    </select>
+
+    <update id="updateType" parameterType="com.icss.hotel.domain.Type">
+        UPDATE tb_type SET tname =#{tname} ,restnum = #{totalnum}-totalnum+restnum ,totalnum =#{totalnum} WHERE tno =#{tno}
+    </update>
+
+    <update id="updateRestNum" parameterType="java.lang.Integer">
+        UPDATE tb_type t SET RestNum =RestNum - 1 WHERE tno = (select r.tno FROM tb_order o, tb_room r WHERE o.rno = r.rno AND o.rno=#{tno} AND o.ostate = 1)
+    </update>
+
+    <update id="updateRestNumn" parameterType="com.icss.hotel.domain.Type">
+       UPDATE tb_type SET RestNum = RestNum + 1 WHERE tname = #{tname};
+    </update>
+</mapper>

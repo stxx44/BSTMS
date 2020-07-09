@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--扫描注解-->
+    <context:component-scan base-package="com.icss.hotel">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"></context:exclude-filter>
+    </context:component-scan>
+
+    <!--数据源配置-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <!--设置数据库的驱动地址-->
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+        <!--设置数据库的地址-->
+        <property name="url"
+                  value="jdbc:mysql://localhost:3306/db3?useUnicode=true&amp;characterEncoding=utf8"></property>
+        <!--设置登录用户名-->
+        <property name="username" value="root"></property>
+        <!--设置密码-->
+        <property name="password" value=""></property>
+        <!--设置数据连接池中初始化得连接数-->
+        <property name="initialSize" value="10"></property>
+        <!--设置数据连接池中最大连接数-->
+        <property name="maxActive" value="30"></property>
+        <!--设置数据连接池中最小连接数-->
+        <property name="minIdle" value="10"></property>
+        <!--设置数据连接池中最大等待时间-->
+        <property name="maxWait" value="600000"></property>
+    </bean>
+
+    <!--MyBatis整合-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--注入数据源-->
+        <property name="dataSource" ref="dataSource"></property>
+        <!--配置MyBatis配置文件-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+        <!--加载映射文件-->
+        <property name="mapperLocations" value="classpath:com/icss/hotel/mapper/*.xml"></property>
+    </bean>
+
+    <bean id="scannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+        <property name="basePackage" value="com.icss.hotel.dao"></property>
+    </bean>
+
+    <!--配置事务-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!--开启注解配置事务-->
+    <aop:annotation-driven transaction-manager="transactionManager"></aop:annotation-driven>
+
+
+</beans>
